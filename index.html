@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Online Video Player</title>
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/8.9.0/video-js.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .video-js {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+  </style>
+</head>
+<body>
+  <h1>The Conjuring- Last Rites (2025)</h1>
+
+  <video
+    id="my-video"
+    class="video-js vjs-big-play-centered"
+    controls
+    preload="auto"
+    width="720"
+    height="420"
+    poster="https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217"
+    data-setup="{}">
+    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript and use a browser that supports HTML5 video.
+    </p>
+  </video>
+
+  <!-- Video.js script -->
+  <script src="https://vjs.zencdn.net/8.9.0/video.min.js"></script>
+</body>
+</html>
