@@ -3,43 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mega Video Embed Player</title>
+<title>Mega Direct Link Generator</title>
 <style>
-  body { font-family: sans-serif; padding: 20px; text-align: center; background: #111; color: #eee; }
-  input { width: 400px; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #555; }
-  button { padding: 8px 12px; border-radius: 6px; border: none; background: #06b6d4; color: #111; cursor: pointer; }
-  iframe { margin-top: 20px; border: none; border-radius: 8px; }
+    /* Basic Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #1f2937; /* Dark background */
+        color: #e5e7eb; /* Light text color */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #f9fafb; /* Lighter heading color */
+    }
+
+    .container {
+        background: #374151; /* Darker container background */
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* Stronger shadow for contrast */
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #4b5563; /* Darker border */
+        background: #4b5563; /* Input background */
+        color: #e5e7eb; /* Input text color */
+        font-size: 16px;
+        transition: border 0.3s;
+    }
+
+    input[type="text"]:focus {
+        border-color: #60a5fa; /* Lighter focus border */
+        outline: none;
+    }
+
+    button {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        background: #3b82f6; /* Blue button */
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background: #2563eb; /* Darker blue on hover */
+    }
+
+    #result {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #embedLink {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #4b5563;
+        margin-bottom: 10px;
+        font-size: 14px;
+        background: #4b5563;
+        color: #e5e7eb;
+    }
+
+    iframe {
+        width: 100%;
+        height: 360px;
+        border-radius: 8px;
+        border: 1px solid #4b5563;
+        margin-top: 10px;
+    }
+
+    .copy-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #10b981;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+    }
+
+    .copy-btn:hover {
+        background: #059669;
+    }
+
+    footer {
+        margin-top: 40px;
+        font-size: 12px;
+        color: #9ca3af; /* Lighter text for footer */
+        text-align: center;
+    }
 </style>
 </head>
 <body>
-  <h2>Mega Video Embed Player</h2>
-  <input type="text" id="megaLink" placeholder="Paste Mega.nz file link">
-  <button onclick="embedMega()">Embed Video</button>
 
-  <div id="playerContainer"></div>
+<div class="container">
+    <h2>Mega Video Direct Link Generator</h2>
+
+    <input type="text" id="megaLink" placeholder="Paste Mega.nz file link here">
+    <button onclick="generateLink()">Generate Playable Link</button>
+
+    <div id="result"></div>
+</div>
+
+<footer>
+    <p>Designed & Created by Manoj Kumar Hansda.</p>
+    <p>© 2025 All Rights Reserved.</p>
+</footer>
 
 <script>
-function embedMega() {
-  const link = document.getElementById('megaLink').value.trim();
-  if (!link) return alert('Please enter a Mega link');
+function generateLink() {
+    const link = document.getElementById('megaLink').value.trim();
+    const match = link.match(/https:\/\/mega\.nz\/file\/([a-zA-Z0-9_-]+)#([a-zA-Z0-9_-]+)/);
 
-  // Extract file ID and key from Mega link
-  const match = link.match(/mega\.nz\/file\/([a-zA-Z0-9_-]+)#([a-zA-Z0-9_-]+)/);
-  if (!match) return alert('Invalid Mega file link');
+    if(!match) {
+        document.getElementById('result').innerHTML = '<p style="color:red;">Invalid Mega file link</p>';
+        return;
+    }
 
-  const fileId = match[1];
-  const fileKey = match[2];
+    const fileId = match[1];
+    const fileKey = match[2];
+    const embedLink = `https://mega.nz/embed/${fileId}#${fileKey}`;
 
-  const iframe = document.createElement('iframe');
-  iframe.width = "640";
-  iframe.height = "360";
-  iframe.allowFullscreen = true;
-  iframe.src = `https://mega.nz/embed/${fileId}#${fileKey}`;
+    document.getElementById('result').innerHTML = `
+        <p>Copy this link to play the video directly:</p>
+        <input type="text" id="embedLink" value="${embedLink}" readonly>
+        <br>
+        <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+        <p style="margin-top:20px;">Preview:</p>
+        <iframe src="${embedLink}" allowfullscreen></iframe>
+    `;
+}
 
-  const container = document.getElementById('playerContainer');
-  container.innerHTML = ''; // remove previous iframe
-  container.appendChild(iframe);
+function copyLink() {
+    const copyText = document.getElementById("embedLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("Link copied to clipboard!");
 }
 </script>
+
 </body>
 </html>
