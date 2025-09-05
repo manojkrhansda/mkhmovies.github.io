@@ -1,51 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Online Video Player</title>
-  <!-- Video.js CSS -->
-  <link href="https://vjs.zencdn.net/8.9.0/video-js.css" rel="stylesheet" />
-  <style>
-    body {
-      background: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .video-js {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mega Video Embed Player</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; text-align: center; background: #111; color: #eee; }
+  input { width: 400px; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #555; }
+  button { padding: 8px 12px; border-radius: 6px; border: none; background: #06b6d4; color: #111; cursor: pointer; }
+  iframe { margin-top: 20px; border: none; border-radius: 8px; }
+</style>
 </head>
 <body>
-  <h1>The Conjuring- Last Rites (2025)</h1>
+  <h2>Mega Video Embed Player</h2>
+  <input type="text" id="megaLink" placeholder="Paste Mega.nz file link">
+  <button onclick="embedMega()">Embed Video</button>
 
-  <video
-    id="my-video"
-    class="video-js vjs-big-play-centered"
-    controls
-    preload="auto"
-    width="720"
-    height="420"
-    poster="https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217"
-    data-setup="{}">
-    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-    <p class="vjs-no-js">
-      To view this video please enable JavaScript and use a browser that supports HTML5 video.
-    </p>
-  </video>
+  <div id="playerContainer"></div>
 
-  <!-- Video.js script -->
-  <script src="https://vjs.zencdn.net/8.9.0/video.min.js"></script>
+<script>
+function embedMega() {
+  const link = document.getElementById('megaLink').value.trim();
+  if (!link) return alert('Please enter a Mega link');
+
+  // Extract file ID and key from Mega link
+  const match = link.match(/mega\.nz\/file\/([a-zA-Z0-9_-]+)#([a-zA-Z0-9_-]+)/);
+  if (!match) return alert('Invalid Mega file link');
+
+  const fileId = match[1];
+  const fileKey = match[2];
+
+  const iframe = document.createElement('iframe');
+  iframe.width = "640";
+  iframe.height = "360";
+  iframe.allowFullscreen = true;
+  iframe.src = `https://mega.nz/embed/${fileId}#${fileKey}`;
+
+  const container = document.getElementById('playerContainer');
+  container.innerHTML = ''; // remove previous iframe
+  container.appendChild(iframe);
+}
+</script>
 </body>
 </html>
